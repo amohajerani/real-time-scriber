@@ -10,7 +10,6 @@ from deepgram import (
     DeepgramClientOptions
 )
 from openai import OpenAI
-import json
 from config.mongodb import recordings, prompts
 from datetime import datetime
 from flask import session
