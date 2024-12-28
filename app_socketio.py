@@ -11,7 +11,7 @@ from deepgram import (
 )
 from openai import OpenAI
 import json
-from config.mongodb import recordings
+from config.mongodb import recordings, prompts
 from datetime import datetime
 
 load_dotenv()
@@ -22,12 +22,12 @@ current_transcript = ""
 
 def get_prompt(prompt_name='default_summary'):
     try:
-        with open('prompts.json', 'r') as file:
-            prompts = json.load(file)
-            for prompt in prompts['prompts']:
-                if prompt['name'] == prompt_name:
-                    return prompt['content']
-            return prompts['prompts'][0]['content']  # fallback to first prompt
+        prompt = prompts.find_one({'name': prompt_name})
+        if prompt:
+            return prompt['content']
+        # Fallback to first prompt if requested prompt not found
+        fallback_prompt = prompts.find_one()
+        return fallback_prompt['content'] if fallback_prompt else 'Error: No prompts available'
     except Exception as e:
         print(f'Error loading prompt: {e}')
         return 'Error loading prompt'

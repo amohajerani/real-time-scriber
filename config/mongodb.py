@@ -8,3 +8,4 @@ MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
 client = MongoClient(MONGODB_URI)
 db = client.realtime
 recordings = db.recordings
+prompts = db.prompts

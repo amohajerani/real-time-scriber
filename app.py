@@ -3,7 +3,7 @@ import logging
 from dotenv import load_dotenv
 from flask import Flask, render_template, jsonify, request
 import json
-from config.mongodb import recordings
+from config.mongodb import recordings, prompts
 from bson import ObjectId
 from datetime import datetime
 load_dotenv()
@@ -19,9 +19,8 @@ def index():
 @app.route('/get_prompts')
 def get_prompts():
     try:
-        with open('prompts.json', 'r') as file:
-            prompts = json.load(file)
-            return jsonify(prompts)
+        prompts_list = list(prompts.find({}, {'_id': 0}))
+        return jsonify({'prompts': prompts_list})
     except Exception as e:
         return {'error': 'Error loading prompts: ' + str(e)}
 
@@ -33,20 +32,15 @@ def update_prompt():
         prompt_name = data.get('name')
         new_content = data.get('content')
 
-        with open('prompts.json', 'r') as file:
-            prompts_data = json.load(file)
+        result = prompts.update_one(
+            {'name': prompt_name},
+            {'$set': {'content': new_content}}
+        )
 
-        # Find and update the prompt
-        for prompt in prompts_data['prompts']:
-            if prompt['name'] == prompt_name:
-                prompt['content'] = new_content
-                break
-
-        # Save the updated prompts
-        with open('prompts.json', 'w') as file:
-            json.dump(prompts_data, file, indent=2)
-
-        return jsonify({'success': True})
+        if result.modified_count > 0:
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': 'Prompt not found'})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
@@ -61,22 +55,16 @@ def create_prompt():
         if not prompt_name or not content:
             return jsonify({'success': False, 'error': 'Name and content are required'})
 
-        with open('prompts.json', 'r') as file:
-            prompts_data = json.load(file)
-
         # Check if prompt name already exists
-        if any(prompt['name'] == prompt_name for prompt in prompts_data['prompts']):
+        existing_prompt = prompts.find_one({'name': prompt_name})
+        if existing_prompt:
             return jsonify({'success': False, 'error': 'Prompt name already exists'})
 
         # Add new prompt
-        prompts_data['prompts'].append({
+        prompts.insert_one({
             'name': prompt_name,
             'content': content
         })
-
-        # Save updated prompts
-        with open('prompts.json', 'w') as file:
-            json.dump(prompts_data, file, indent=2)
 
         return jsonify({'success': True})
     except Exception as e:
