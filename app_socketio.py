@@ -13,6 +13,7 @@ from openai import OpenAI
 import json
 from config.mongodb import recordings, prompts
 from datetime import datetime
+from flask import session
 
 load_dotenv()
 
@@ -126,6 +127,7 @@ def restart_deepgram():
 def handle_get_summary(data):
     transcript = data.get('transcript', '')
     prompt_name = data.get('promptType', 'default_summary')
+    user_id = data.get('user_id')
     if not transcript:
         return
 
@@ -146,8 +148,10 @@ def handle_get_summary(data):
             "transcript": transcript,
             "summary": summary,
             "prompt_type": prompt_name,
-            "timestamp": datetime.utcnow()
+            "timestamp": datetime.utcnow(),
+            "user_id": user_id
         }
+
         recordings.insert_one(recording_doc)
 
         recording_id = str(recording_doc['_id'])

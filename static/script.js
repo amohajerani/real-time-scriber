@@ -64,6 +64,7 @@ async function stopRecording() {
     socket.emit("get_summary", {
       transcript: currentTranscript,
       promptType: promptType,
+      user_id: document.body.getAttribute("data-user-id"),
     });
 
     microphone = null;
@@ -116,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("get_summary", {
       transcript: transcript,
       promptType: promptType,
+      user_id: document.body.getAttribute("data-user-id"),
     });
   });
 
@@ -130,6 +132,13 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error stopping recording:", error)
       );
     }
+  });
+
+  loadUserRecordings();
+
+  socket.on("recording_saved", (data) => {
+    currentRecordingId = data.recording_id;
+    loadUserRecordings();
   });
 });
 
@@ -216,3 +225,54 @@ document
 document.getElementById("logoutBtn").addEventListener("click", () => {
   window.location.href = "/logout";
 });
+
+function loadUserRecordings() {
+  fetch("/get_user_recordings")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Received recordings data:", data);
+      if (data.success) {
+        const recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+
+        if (data.recordings.length === 0) {
+          recordingsList.innerHTML = "<p>No recordings found</p>";
+          return;
+        }
+
+        data.recordings.forEach((recording) => {
+          const recordingElement = document.createElement("div");
+          recordingElement.className = "recording-item";
+          recordingElement.innerHTML = `
+            <div class="recording-header">
+              <span class="recording-timestamp">${recording.timestamp}</span>
+              <span class="recording-prompt">${recording.prompt_type
+                .replace(/_/g, " ")
+                .replace(/\b\w/g, (l) => l.toUpperCase())}</span>
+            </div>
+            <div class="recording-preview">${recording.summary}</div>
+          `;
+
+          recordingElement.addEventListener("click", () => {
+            document.getElementById("captions").innerHTML =
+              recording.transcript;
+            document.getElementById("summary").innerHTML = recording.summary;
+            document.getElementById("promptSelect").value =
+              recording.prompt_type;
+            currentRecordingId = recording._id;
+          });
+
+          recordingsList.appendChild(recordingElement);
+        });
+      } else {
+        console.error("Error loading recordings:", data.error);
+        const recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "<p>Error loading recordings</p>";
+      }
+    })
+    .catch((error) => {
+      console.error("Error loading recordings:", error);
+      const recordingsList = document.getElementById("recordingsList");
+      recordingsList.innerHTML = "<p>Error loading recordings</p>";
+    });
+}

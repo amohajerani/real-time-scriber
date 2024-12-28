@@ -13,7 +13,7 @@
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="">
+  <body class="" data-user-id="{{ session['user_id'] }}">
     <div class="header">
       <h1>Clinical Documentation Assistant</h1>
       <p class="subtitle">AI-Powered Medical Transcription & Documentation</p>
@@ -27,14 +27,8 @@
         <div class="button-container">
           <input type="checkbox" id="record" class="mic-checkbox" />
           <label for="record" class="mic-button">
-            <div class="mic">
-              <div class="mic-button-loader"></div>
-              <div class="mic-base"></div>
-            </div>
-            <div class="button-message">
-              <span>&nbsp;</span>
-              <span>RECORD</span>
-            </div>
+            <i class="fas fa-microphone"></i>
+            <span class="button-text">Start Recording</span>
           </label>
         </div>
         <div class="captions" id="captions" contenteditable="true">
@@ -58,16 +52,11 @@
             <button id="editPromptBtn" class="action-btn">
               <i class="fas fa-edit"></i> Edit Template
             </button>
+            <button id="newPromptBtn" class="action-btn">
+              <i class="fas fa-plus"></i> New Template
+            </button>
           </div>
-        </div>
 
-        <div class="prompt-controls">
-          <button id="newPromptBtn" class="action-btn">
-            <i class="fas fa-plus"></i> New Template
-          </button>
-        </div>
-
-        <div class="documentation-section">
           <h2>Template Format</h2>
           <div class="prompt" id="prompt">
             <span>Loading template...</span>
@@ -82,7 +71,9 @@
               </button>
             </div>
           </div>
+        </div>
 
+        <div class="documentation-section">
           <h2>
             Clinical Note
             <button
@@ -101,6 +92,13 @@
           <button id="saveSummaryBtn" class="action-btn">
             <i class="fas fa-save"></i> Save Note
           </button>
+        </div>
+      </div>
+
+      <div class="recordings-container">
+        <h2>Past Recordings</h2>
+        <div id="recordingsList" class="recordings-list">
+          <!-- Recordings will be populated here -->
         </div>
       </div>
     </div>

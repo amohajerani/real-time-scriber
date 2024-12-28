@@ -167,6 +167,33 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/get_user_recordings')
+@login_required
+def get_user_recordings():
+    try:
+        user_id = session.get('user_id')
+        user_recordings = list(recordings.find(
+            {"user_id": user_id},
+            {'transcript': 1, 'summary': 1, 'timestamp': 1, 'prompt_type': 1}
+        ).sort('timestamp', -1))
+
+        # Convert ObjectId to string and format timestamp
+        for record in user_recordings:
+            record['_id'] = str(record['_id'])
+            record['timestamp'] = record['timestamp'].strftime(
+                '%Y-%m-%d %H:%M:%S')
+
+        return jsonify({
+            'success': True,
+            'recordings': user_recordings
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+
 if __name__ == '__main__':
     logging.info("Starting Flask server.")
     # Run flask app
