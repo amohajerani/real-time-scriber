@@ -239,6 +239,29 @@ def add_patient():
         return jsonify({'success': False, 'error': str(e)})
 
 
+@app.route('/update_patient_notes', methods=['POST'])
+@login_required
+def update_patient_notes():
+    try:
+        data = request.json
+        patient_id = data.get('patient_id')
+        notes = data.get('notes')
+
+        if not patient_id:
+            return jsonify({'success': False, 'error': 'Patient ID is required'})
+
+        result = patients.update_one(
+            {'_id': ObjectId(patient_id)},
+            {'$set': {'notes': notes}}
+        )
+
+        return jsonify({
+            'success': True if result.modified_count > 0 else False
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+
 if __name__ == '__main__':
     logging.info("Starting Flask server.")
     # Run flask app

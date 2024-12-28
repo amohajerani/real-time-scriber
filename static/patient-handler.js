@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const patientLastName = document.getElementById("patientLastName");
   const patientNotes = document.getElementById("patientNotes");
   const patientSelect = document.getElementById("patientSelect");
+  const patientNotesSection = document.getElementById("patientNotesSection");
+  const patientNotesText = document.getElementById("patientNotesText");
+  const saveNotesBtn = document.getElementById("saveNotesBtn");
 
   function loadPatients() {
     fetch("/get_patients")
@@ -81,6 +84,64 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("Error adding patient:", error);
       alert("Failed to add patient");
+    }
+  });
+
+  // Update the patient select change handler
+  patientSelect.addEventListener("change", async (e) => {
+    const selectedPatientId = e.target.value;
+    if (selectedPatientId) {
+      try {
+        const response = await fetch("/get_patients");
+        const data = await response.json();
+        if (data.success) {
+          const selectedPatient = data.patients.find(
+            (p) => p._id === selectedPatientId
+          );
+          if (selectedPatient) {
+            patientNotesText.value = selectedPatient.notes || "";
+            patientNotesSection.style.display = "block";
+          }
+        }
+      } catch (error) {
+        console.error("Error loading patient notes:", error);
+      }
+    } else {
+      patientNotesSection.style.display = "none";
+    }
+  });
+
+  // Add save notes handler
+  saveNotesBtn.addEventListener("click", async () => {
+    const patientId = patientSelect.value;
+    const notes = patientNotesText.value;
+
+    if (!patientId) {
+      alert("Please select a patient first");
+      return;
+    }
+
+    try {
+      const response = await fetch("/update_patient_notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          patient_id: patientId,
+          notes: notes,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Notes saved successfully");
+      } else {
+        alert(data.error || "Failed to save notes");
+      }
+    } catch (error) {
+      console.error("Error saving notes:", error);
+      alert("Error saving notes");
     }
   });
 

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Deepgram Test</title>
+    <title>Bungja</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -15,8 +15,7 @@
   </head>
   <body class="" data-user-id="{{ session['user_id'] }}">
     <div class="header">
-      <h1>Clinical Documentation Assistant</h1>
-      <p class="subtitle">AI-Powered Medical Transcription & Documentation</p>
+      <h1>Bungja</h1>
       <button id="logoutBtn" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i> Logout
       </button>
@@ -68,6 +67,17 @@
               <i class="fas fa-user-plus"></i> New Patient
             </button>
           </div>
+          <div
+            id="patientNotesSection"
+            style="display: none"
+            class="patient-notes-section"
+          >
+            <h3>Patient Notes</h3>
+            <div class="notes-container">
+              <textarea id="patientNotesText"></textarea>
+              <button id="saveNotesBtn" class="action-btn">Save</button>
+            </div>
+          </div>
         </div>
 
         <div class="recording-section">
@@ -81,9 +91,7 @@
           <div class="captions" id="captions" contenteditable="true">
             <span>Transcript will appear here after recording</span>
           </div>
-          <button id="saveTranscriptBtn" class="action-btn">
-            <i class="fas fa-save"></i> Save Transcript
-          </button>
+          <button id="saveTranscriptBtn" class="action-btn">Save</button>
         </div>
 
         <div class="summary-container">
@@ -95,7 +103,7 @@
                 class="action-btn secondary tooltip"
                 title="Copy to clipboard"
               >
-                <i class="fas fa-copy"></i> Copy Note
+                Copy
               </button>
             </h2>
             <div class="summary" id="summary" contenteditable="true">
@@ -103,9 +111,7 @@
                 >Generated clinical note will appear here after recording</span
               >
             </div>
-            <button id="saveSummaryBtn" class="action-btn">
-              <i class="fas fa-save"></i> Save Note
-            </button>
+            <button id="saveSummaryBtn" class="action-btn">Save</button>
           </div>
         </div>
 

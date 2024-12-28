@@ -44,20 +44,21 @@ h1 {
   gap: 30px;
 }
 
-.recording-section {
+.recording-section,
+.summary-container,
+.patient-section {
   background-color: white;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .button-container {
   margin: 20px 0;
+  align-self: center;
 }
 
 .mic-checkbox {
@@ -114,20 +115,29 @@ h1 {
   display: none;
 }
 
-#captions {
-  color: #2d3748;
-  font-size: 16px;
-  line-height: 1.6;
+#captions,
+.summary,
+.notes-container textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 20px;
   margin: 20px 0;
-  width: 100%;
-  text-align: left;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+#captions {
   height: 60px;
-  overflow-y: auto;
   max-height: 60px;
+  overflow-y: auto;
+}
+
+.notes-container {
+  width: 100%;
 }
 
 .summary-container {
@@ -525,6 +535,9 @@ select#promptSelect {
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 30px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 1000px;
 }
 
 .recordings-list {
@@ -660,4 +673,43 @@ select#promptSelect {
   color: #64748b;
   font-size: 16px;
   margin: 0;
+}
+
+.patient-notes-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.patient-notes-section h3 {
+  color: #2d3748;
+  margin-bottom: 15px;
+}
+
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.notes-container button {
+  align-self: flex-start;
+}
+
+.notes-container textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.notes-container textarea:focus {
+  outline: none;
+  border-color: #47aca9;
+  box-shadow: 0 0 0 3px rgba(71, 172, 169, 0.1);
 }
