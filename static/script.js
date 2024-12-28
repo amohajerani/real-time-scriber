@@ -4,10 +4,12 @@ let microphone;
 let currentTranscript = "";
 let currentRecordingId = null;
 
-const socket_port = 5001;
-socket = io(
-  "http://" + window.location.hostname + ":" + socket_port.toString()
-);
+const socket_port = process.env.SOCKET_PORT || 5001;
+const socketUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://bungja-socketio.onrender.com"
+    : `http://${window.location.hostname}:${socket_port}`;
+socket = io(socketUrl);
 
 socket.on("transcription_update", (data) => {
   currentTranscript += " " + data.transcription;

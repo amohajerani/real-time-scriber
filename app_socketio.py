@@ -37,8 +37,11 @@ def get_prompt(prompt_name='default_summary'):
 llm_prompt = get_prompt()
 
 app_socketio = Flask("app_socketio")
-socketio = SocketIO(app_socketio, cors_allowed_origins=[
-                    'http://127.0.0.1:8000'])
+allowed_origins = [
+    'http://127.0.0.1:8000',  # Local development
+    'https://bungja.onrender.com'  # Production URL
+]
+socketio = SocketIO(app_socketio, cors_allowed_origins=allowed_origins)
 
 API_KEY = os.getenv("DEEPGRAM_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_KEY")
@@ -164,6 +167,6 @@ def handle_get_summary(data):
 
 
 if __name__ == '__main__':
-    logging.info("Starting SocketIO server.")
-    socketio.run(app_socketio, debug=True,
-                 allow_unsafe_werkzeug=True, port=5001)
+    port = int(os.environ.get('PORT', 5001))
+    socketio.run(app_socketio, host='0.0.0.0', port=port,
+                 allow_unsafe_werkzeug=True)

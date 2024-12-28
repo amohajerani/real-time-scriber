@@ -1,4 +1,5 @@
 import logging
+import os
 
 from dotenv import load_dotenv
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
@@ -263,6 +264,5 @@ def update_patient_notes():
 
 
 if __name__ == '__main__':
-    logging.info("Starting Flask server.")
-    # Run flask app
-    app.run(debug=True, port=8000)
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host='0.0.0.0', port=port)
