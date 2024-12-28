@@ -44,7 +44,7 @@ allowed_origins = [
 socketio = SocketIO(app_socketio, cors_allowed_origins=allowed_origins)
 
 API_KEY = os.getenv("DEEPGRAM_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 print(OPENAI_API_KEY)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
