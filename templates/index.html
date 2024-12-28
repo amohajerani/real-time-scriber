@@ -14,60 +14,88 @@
     ></script>
   </head>
   <body class="">
-    <div class="content">
-      <img class="click" src="../static/click.png" />
-      <div class="button-container">
-        <input type="checkbox" id="record" class="mic-checkbox" />
-        <label for="record" class="mic-button">
-          <div class="mic">
-            <div class="mic-button-loader"></div>
-            <div class="mic-base"></div>
-          </div>
-          <div class="button-message">
-            <span>&nbsp;</span>
-            <span> START </span>
-          </div>
-        </label>
-      </div>
+    <div class="header">
+      <h1>Clinical Documentation Assistant</h1>
+      <p class="subtitle">AI-Powered Medical Transcription & Documentation</p>
     </div>
-    <h1>Captions by Deepgram</h1>
-    <div class="captions" id="captions">
-      <span>Realtime speech transcription API</span>
-    </div>
-    <div class="summary-container">
-      <div class="prompt-selector">
-        <h2>Select Prompt Type</h2>
-        <select id="promptSelect">
-          <!-- Options will be populated dynamically -->
-        </select>
-        <button id="regenerateBtn" class="regenerate-btn">
-          <i class="fas fa-sync-alt"></i> Regenerate Summary
-        </button>
-        <button id="editPromptBtn" class="edit-btn">
-          <i class="fas fa-edit"></i> Edit Prompt
-        </button>
-      </div>
-      <div class="prompt-controls">
-        <button id="newPromptBtn" class="edit-btn">
-          <i class="fas fa-plus"></i> New Prompt
-        </button>
-      </div>
-      <h2>Prompt</h2>
-      <div class="prompt" id="prompt">
-        <span>Loading prompt...</span>
-      </div>
-      <div class="prompt-editor" id="promptEditor" style="display: none">
-        <textarea id="promptText"></textarea>
-        <div class="editor-buttons">
-          <button id="savePromptBtn">Save</button>
-          <button id="cancelEditBtn">Cancel</button>
+
+    <div class="main-container">
+      <div class="recording-section">
+        <div class="button-container">
+          <input type="checkbox" id="record" class="mic-checkbox" />
+          <label for="record" class="mic-button">
+            <div class="mic">
+              <div class="mic-button-loader"></div>
+              <div class="mic-base"></div>
+            </div>
+            <div class="button-message">
+              <span>&nbsp;</span>
+              <span>RECORD</span>
+            </div>
+          </label>
+        </div>
+        <div class="captions" id="captions">
+          <span>Your dictation will appear here in real-time</span>
         </div>
       </div>
-      <h2>Summary</h2>
-      <div class="summary" id="summary">
-        <span>Summary will appear here after recording</span>
+
+      <div class="summary-container">
+        <div class="prompt-selector">
+          <h2>Template Selection</h2>
+          <div class="selector-controls">
+            <select id="promptSelect">
+              <!-- Options will be populated dynamically -->
+            </select>
+            <button id="regenerateBtn" class="action-btn">
+              <i class="fas fa-sync-alt"></i> Regenerate Note
+            </button>
+            <button id="editPromptBtn" class="action-btn">
+              <i class="fas fa-edit"></i> Edit Template
+            </button>
+          </div>
+        </div>
+
+        <div class="prompt-controls">
+          <button id="newPromptBtn" class="action-btn">
+            <i class="fas fa-plus"></i> New Template
+          </button>
+        </div>
+
+        <div class="documentation-section">
+          <h2>Template Format</h2>
+          <div class="prompt" id="prompt">
+            <span>Loading template...</span>
+          </div>
+
+          <div class="prompt-editor" id="promptEditor" style="display: none">
+            <textarea id="promptText"></textarea>
+            <div class="editor-buttons">
+              <button id="savePromptBtn" class="action-btn">Save</button>
+              <button id="cancelEditBtn" class="action-btn secondary">
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <h2>
+            Clinical Note
+            <button
+              id="copyNoteBtn"
+              class="action-btn secondary tooltip"
+              title="Copy to clipboard"
+            >
+              <i class="fas fa-copy"></i> Copy Note
+            </button>
+          </h2>
+          <div class="summary" id="summary">
+            <span
+              >Generated clinical note will appear here after recording</span
+            >
+          </div>
+        </div>
       </div>
     </div>
+
     <div id="newPromptDialog" class="prompt-dialog" style="display: none">
       <h3>Create New Prompt</h3>
       <input type="text" id="newPromptName" placeholder="Prompt Name" />

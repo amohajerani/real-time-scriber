@@ -118,3 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+document.getElementById("copyNoteBtn").addEventListener("click", async () => {
+  const summaryText = document.getElementById("summary").innerText;
+  try {
+    await navigator.clipboard.writeText(summaryText);
+    // Optional: Add some visual feedback that the copy was successful
+  } catch (err) {
+    console.error("Failed to copy text: ", err);
+  }
+});

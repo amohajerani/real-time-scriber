@@ -3,21 +3,55 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter");
 
 body {
-  color: white;
+  color: #333;
   display: flex;
   align-items: center;
   font-family: "Inter", sans-serif;
-  justify-content: center;
   flex-direction: column;
-  height: 90vh;
-  background-color: #000;
-  padding-top: 100px;
+  min-height: 100vh;
+  background-color: #f5f7f9;
+  padding: 0;
+  margin: 0;
 }
 
-.content {
+.header {
+  background-color: #47aca9;
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  color: white;
+  font-family: "Arimo", sans-serif;
+  font-size: 32px;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 10px 0 0 0;
+  font-size: 16px;
+}
+
+.main-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.recording-section {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  text-align: center;
   display: flex;
-  height: 30vh;
-  position: relative;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -48,6 +82,7 @@ body {
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   position: relative;
+  cursor: pointer;
 }
 
 .button-message,
@@ -59,8 +94,8 @@ body {
 
 .button-message {
   position: absolute;
-  width: 50px;
-  color: #fff;
+  width: 100%;
+  color: #47aca9;
   font-family: "Arimo", sans-serif;
   font-weight: 700;
   font-size: 25px;
@@ -69,8 +104,9 @@ body {
   z-index: 2;
   transform: rotateY(0deg);
   pointer-events: none;
-  left: 58px;
-  top: 71px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .mic-button-loader {
@@ -145,135 +181,102 @@ body {
 }
 
 #captions {
-  color: rgb(237, 237, 242);
-  font-size: 24px;
-  font-family: "Inter", sans-serif;
-  margin: 10px 0;
-  text-align: center;
-}
-
-h1 {
-  font-family: "Arimo", sans-serif;
-  font-size: 40px;
-  margin-top: 60px;
-  letter-spacing: -0.02em;
-  opacity: 1;
-  text-align: center;
-}
-
-.button-container {
-  display: flex;
-  gap: 16px;
-}
-
-.info-button {
-  display: flex;
-  align-items: center;
-  color: black;
-  height: 40px;
-  border-radius: 4px;
-  padding: 0 16px;
-  margin-top: 32px;
-  font-family: "Arimo", sans-serif;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.sign-up {
-  color: white;
-  position: relative;
-  background-origin: border-box;
-  background-image: linear-gradient(90deg, #201cff -91.5%, #13ef95 80.05%);
-  box-shadow: 2px 1000px 1px var(--md-code-background) inset;
-  z-index: 1;
-}
-
-.sign-up::before {
-  content: "";
-  border-radius: 4px;
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  bottom: 1px;
-  left: 1px;
-  background-color: black;
-  z-index: -1;
-}
-
-.docs {
+  color: #2d3748;
+  font-size: 16px;
+  line-height: 1.6;
   background-color: white;
-}
-
-.docs::after {
-  font-family: FontAwesome;
-  font-weight: 900;
-  content: "\f061";
-  margin-right: -4px;
-  margin-left: 8px;
-}
-
-.click {
-  position: absolute;
-  height: 150px;
-  left: 20px;
-  top: -144px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 30px 0;
+  width: 100%;
+  text-align: left;
 }
 
 .summary-container {
-  margin-top: 30px;
-  text-align: center;
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.summary {
-  color: rgb(237, 237, 242);
-  font-size: 18px;
-  font-family: "Inter", sans-serif;
-  margin: 10px 0;
-  text-align: center;
-  max-width: 600px;
+.prompt-selector {
+  background-color: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 30px;
 }
 
-.prompt {
-  color: rgb(237, 237, 242);
-  font-size: 16px;
-  font-family: "Inter", sans-serif;
-  margin: 10px 0;
-  text-align: left;
-  max-width: 600px;
-  padding: 10px;
-  background-color: #1a1a1a;
-  border-radius: 4px;
-  white-space: pre-wrap;
+.selector-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.regenerate-btn {
-  margin-left: 10px;
+.documentation-section h2 {
+  color: #2d3748;
+  font-size: 20px;
+  margin: 30px 0 15px 0;
+  border-bottom: 2px solid #47aca9;
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.documentation-section h2 .action-btn {
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.action-btn {
   padding: 8px 16px;
   background-color: #47aca9;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-family: "Inter", sans-serif;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  transition: background-color 0.2s;
 }
 
-.regenerate-btn:hover {
+.action-btn:hover {
   background-color: #3d918e;
 }
 
-.regenerate-btn i {
-  font-size: 14px;
+.action-btn.secondary {
+  background-color: #718096;
 }
 
-.prompt-selector {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+.action-btn.secondary:hover {
+  background-color: #4a5568;
+}
+
+select#promptSelect {
+  background-color: white;
+  color: #2d3748;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-family: "Inter", sans-serif;
+  min-width: 200px;
+}
+
+.prompt,
+.summary {
+  color: #2d3748;
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
 }
 
 .prompt-editor {
@@ -383,4 +386,24 @@ h1 {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
+}
+
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+.tooltip:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
 }
