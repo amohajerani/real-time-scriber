@@ -410,3 +410,21 @@ select#promptSelect {
   white-space: nowrap;
   pointer-events: none;
 }
+
+.captions[contenteditable="true"],
+.summary[contenteditable="true"] {
+  border: 1px solid #e2e8f0;
+  min-height: 100px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.captions[contenteditable="true"]:focus,
+.summary[contenteditable="true"]:focus {
+  border-color: #47aca9;
+}
+
+#saveTranscriptBtn,
+#saveSummaryBtn {
+  margin-top: 10px;
+}

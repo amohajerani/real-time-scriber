@@ -150,6 +150,9 @@ def handle_get_summary(data):
         }
         recordings.insert_one(recording_doc)
 
+        recording_id = str(recording_doc['_id'])
+        socketio.emit('recording_saved', {'recording_id': recording_id})
+
         socketio.emit('summary_ready', {'summary': summary})
     except Exception as e:
         print(f"Error processing summary: {e}")

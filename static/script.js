@@ -2,6 +2,7 @@ let isRecording = false;
 let socket;
 let microphone;
 let currentTranscript = "";
+let currentRecordingId = null;
 
 const socket_port = 5001;
 socket = io(
@@ -78,6 +79,10 @@ socket.on("summary_ready", (data) => {
   document.getElementById("summary").innerHTML = data.summary;
 });
 
+socket.on("recording_saved", (data) => {
+  currentRecordingId = data.recording_id;
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const recordButton = document.getElementById("record");
   const promptSelect = document.getElementById("promptSelect");
@@ -137,3 +142,73 @@ document.getElementById("copyNoteBtn").addEventListener("click", async () => {
     console.error("Failed to copy text: ", err);
   }
 });
+
+document
+  .getElementById("saveTranscriptBtn")
+  .addEventListener("click", async () => {
+    if (!currentRecordingId) {
+      alert("No recording session to save");
+      return;
+    }
+
+    const transcript = document.getElementById("captions").innerText;
+
+    try {
+      const response = await fetch("/save_edits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          recording_id: currentRecordingId,
+          transcript: transcript,
+          type: "transcript",
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Transcript saved successfully");
+      } else {
+        alert("Error saving transcript");
+      }
+    } catch (error) {
+      console.error("Error saving transcript:", error);
+      alert("Error saving transcript");
+    }
+  });
+
+document
+  .getElementById("saveSummaryBtn")
+  .addEventListener("click", async () => {
+    if (!currentRecordingId) {
+      alert("No recording session to save");
+      return;
+    }
+
+    const summary = document.getElementById("summary").innerText;
+
+    try {
+      const response = await fetch("/save_edits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          recording_id: currentRecordingId,
+          summary: summary,
+          type: "summary",
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Clinical note saved successfully");
+      } else {
+        alert("Error saving clinical note");
+      }
+    } catch (error) {
+      console.error("Error saving clinical note:", error);
+      alert("Error saving clinical note");
+    }
+  });
