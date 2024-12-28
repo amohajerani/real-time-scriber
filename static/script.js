@@ -212,3 +212,7 @@ document
       alert("Error saving clinical note");
     }
   });
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  window.location.href = "/logout";
+});

@@ -1,22 +1,27 @@
 import logging
 
 from dotenv import load_dotenv
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 import json
 from config.mongodb import recordings, prompts
 from bson import ObjectId
 from datetime import datetime
+from auth import login_required, register_user, verify_user
+import secrets
 load_dotenv()
 
 app = Flask("app_http")
+app.secret_key = secrets.token_hex(16)  # Required for session management
 
 
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 
 
 @app.route('/get_prompts')
+@login_required
 def get_prompts():
     try:
         prompts_list = list(prompts.find({}, {'_id': 0}))
@@ -26,6 +31,7 @@ def get_prompts():
 
 
 @app.route('/update_prompt', methods=['POST'])
+@login_required
 def update_prompt():
     try:
         data = request.json
@@ -124,6 +130,41 @@ def save_edits():
     except Exception as e:
         print(f"Error saving edits: {e}")
         return jsonify({'success': False, 'error': str(e)})
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        success, user = verify_user(username, password)
+        if success:
+            session['user_id'] = str(user['_id'])
+            return redirect(url_for('index'))
+        return render_template('login.html', error="Invalid credentials")
+
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        success, message = register_user(username, password)
+        if success:
+            return redirect(url_for('login'))
+        return render_template('register.html', error=message)
+
+    return render_template('register.html')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 
 if __name__ == '__main__':

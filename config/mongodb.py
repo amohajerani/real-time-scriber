@@ -9,3 +9,4 @@ client = MongoClient(MONGODB_URI)
 db = client.realtime
 recordings = db.recordings
 prompts = db.prompts
+users = db.users

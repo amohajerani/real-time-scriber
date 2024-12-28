@@ -20,6 +20,7 @@ body {
   padding: 20px 0;
   text-align: center;
   margin-bottom: 40px;
+  position: relative;
 }
 
 h1 {
@@ -427,4 +428,131 @@ select#promptSelect {
 #saveTranscriptBtn,
 #saveSummaryBtn {
   margin-top: 10px;
+}
+
+.auth-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 40px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h1 {
+  color: #2d3748;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #47aca9;
+  box-shadow: 0 0 0 3px rgba(71, 172, 169, 0.1);
+}
+
+.auth-container button {
+  width: calc(100% - 24px);
+  padding: 12px;
+  background-color: #47aca9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-container button i {
+  font-size: 16px;
+}
+
+.auth-container button:hover {
+  background-color: #3d918e;
+}
+
+.auth-container p {
+  text-align: center;
+  margin-top: 20px;
+  color: #4a5568;
+}
+
+.auth-container a {
+  color: #47aca9;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-container a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  background-color: #fff5f5;
+  border: 1px solid #feb2b2;
+  color: #c53030;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-logo img {
+  height: 40px;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: white;
 }
