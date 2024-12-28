@@ -43,14 +43,38 @@
         <button id="regenerateBtn" class="regenerate-btn">
           <i class="fas fa-sync-alt"></i> Regenerate Summary
         </button>
+        <button id="editPromptBtn" class="edit-btn">
+          <i class="fas fa-edit"></i> Edit Prompt
+        </button>
+      </div>
+      <div class="prompt-controls">
+        <button id="newPromptBtn" class="edit-btn">
+          <i class="fas fa-plus"></i> New Prompt
+        </button>
       </div>
       <h2>Prompt</h2>
       <div class="prompt" id="prompt">
         <span>Loading prompt...</span>
       </div>
+      <div class="prompt-editor" id="promptEditor" style="display: none">
+        <textarea id="promptText"></textarea>
+        <div class="editor-buttons">
+          <button id="savePromptBtn">Save</button>
+          <button id="cancelEditBtn">Cancel</button>
+        </div>
+      </div>
       <h2>Summary</h2>
       <div class="summary" id="summary">
         <span>Summary will appear here after recording</span>
+      </div>
+    </div>
+    <div id="newPromptDialog" class="prompt-dialog" style="display: none">
+      <h3>Create New Prompt</h3>
+      <input type="text" id="newPromptName" placeholder="Prompt Name" />
+      <textarea id="newPromptContent" placeholder="Prompt Content"></textarea>
+      <div class="dialog-buttons">
+        <button id="saveNewPromptBtn">Save</button>
+        <button id="cancelNewPromptBtn">Cancel</button>
       </div>
     </div>
     <script src="../static/script.js"></script>

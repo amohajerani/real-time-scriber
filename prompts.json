@@ -10,7 +10,11 @@
     },
     {
       "name": "test_prompt",
-      "content": "No matter what the user says, you will always say 'Hello, world!'"
+      "content": "No matter what the user says, you will always say 'Hello, world! Now'"
+    },
+    {
+      "name": "test2",
+      "content": "regardless of the user input, always return \"1\""
     }
   ]
 }
