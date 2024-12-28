@@ -3,6 +3,7 @@ import logging
 from dotenv import load_dotenv
 from flask import Flask, render_template, jsonify, request
 import json
+from config.mongodb import recordings
 load_dotenv()
 
 app = Flask("app_http")
@@ -78,6 +79,26 @@ def create_prompt():
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+
+
+@app.route('/recordings')
+def get_recordings():
+    try:
+        # Retrieve the last 10 recordings, sorted by timestamp
+        recent_recordings = list(recordings.find(
+            {},
+            {'_id': 0}  # Exclude MongoDB _id from results
+        ).sort('timestamp', -1).limit(10))
+
+        return jsonify({
+            'success': True,
+            'recordings': recent_recordings
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
 
 
 if __name__ == '__main__':

@@ -11,6 +11,8 @@ from deepgram import (
 )
 from openai import OpenAI
 import json
+from config.mongodb import recordings
+from datetime import datetime
 
 load_dotenv()
 
@@ -123,7 +125,6 @@ def restart_deepgram():
 @socketio.on('get_summary')
 def handle_get_summary(data):
     transcript = data.get('transcript', '')
-    # Get prompt type from frontend
     prompt_name = data.get('promptType', 'default_summary')
     if not transcript:
         return
@@ -139,9 +140,19 @@ def handle_get_summary(data):
             ]
         )
         summary = response.choices[0].message.content
+
+        # Store the recording in MongoDB
+        recording_doc = {
+            "transcript": transcript,
+            "summary": summary,
+            "prompt_type": prompt_name,
+            "timestamp": datetime.utcnow()
+        }
+        recordings.insert_one(recording_doc)
+
         socketio.emit('summary_ready', {'summary': summary})
     except Exception as e:
-        print(f"Error getting summary: {e}")
+        print(f"Error processing summary: {e}")
         socketio.emit('summary_ready', {'summary': "Error generating summary"})
 
 
