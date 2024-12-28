@@ -47,6 +47,7 @@ async function openMicrophone(microphone, socket) {
 
 async function startRecording() {
   isRecording = true;
+  updateRecordButtonText(true);
   microphone = await getMicrophone();
   console.log("Client: Waiting to open microphone");
   await openMicrophone(microphone, socket);
@@ -70,6 +71,7 @@ async function stopRecording() {
 
     microphone = null;
     isRecording = false;
+    updateRecordButtonText(false);
     console.log("Client: Microphone closed");
     document.body.classList.remove("recording");
 
@@ -86,6 +88,7 @@ socket.on("recording_saved", (data) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  updateRecordButtonText(false);
   const recordButton = document.getElementById("record");
   const promptSelect = document.getElementById("promptSelect");
   const regenerateBtn = document.getElementById("regenerateBtn");
@@ -320,4 +323,11 @@ function showPatientPrompt() {
   const recordingsList = document.getElementById("recordingsList");
   recordingsList.innerHTML =
     "<div class='patient-prompt'><p>Please select a patient or create a new patient to start recording</p></div>";
+}
+
+function updateRecordButtonText(isRecording) {
+  const buttonText = document.querySelector(".mic-button .button-text");
+  if (buttonText) {
+    buttonText.textContent = isRecording ? "Stop Recording" : "Start Recording";
+  }
 }
