@@ -10,8 +10,26 @@ from deepgram import (
     DeepgramClientOptions
 )
 from openai import OpenAI
+import json
 
 load_dotenv()
+
+
+def get_prompt(prompt_name='default_summary'):
+    try:
+        with open('prompts.json', 'r') as file:
+            prompts = json.load(file)
+            for prompt in prompts['prompts']:
+                if prompt['name'] == prompt_name:
+                    return prompt['content']
+            return prompts['prompts'][0]['content']  # fallback to first prompt
+    except Exception as e:
+        print(f'Error loading prompt: {e}')
+        return 'Error loading prompt'
+
+
+# Use this function when needed
+llm_prompt = get_prompt()
 
 app_socketio = Flask("app_socketio")
 socketio = SocketIO(app_socketio, cors_allowed_origins=[
@@ -96,15 +114,19 @@ def restart_deepgram():
 @socketio.on('get_summary')
 def handle_get_summary(data):
     transcript = data.get('transcript', '')
+    # Get prompt type from frontend
+    prompt_name = data.get('promptType', 'default_summary')
     if not transcript:
         return
 
     try:
+        # Get the selected prompt content
+        prompt_content = get_prompt(prompt_name)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant that provides concise summaries."},
-                {"role": "user", "content": f"Please provide a brief summary of this transcript: {transcript}"}
+                {"role": "system", "content": prompt_content},
+                {"role": "user", "content": transcript}
             ]
         )
         summary = response.choices[0].message.content

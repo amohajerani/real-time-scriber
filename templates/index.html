@@ -35,11 +35,25 @@
       <span>Realtime speech transcription API</span>
     </div>
     <div class="summary-container">
+      <div class="prompt-selector">
+        <h2>Select Prompt Type</h2>
+        <select id="promptSelect">
+          <!-- Options will be populated dynamically -->
+        </select>
+        <button id="regenerateBtn" class="regenerate-btn">
+          <i class="fas fa-sync-alt"></i> Regenerate Summary
+        </button>
+      </div>
+      <h2>Prompt</h2>
+      <div class="prompt" id="prompt">
+        <span>Loading prompt...</span>
+      </div>
       <h2>Summary</h2>
       <div class="summary" id="summary">
         <span>Summary will appear here after recording</span>
       </div>
     </div>
     <script src="../static/script.js"></script>
+    <script src="../static/prompt-handler.js"></script>
   </body>
 </html>

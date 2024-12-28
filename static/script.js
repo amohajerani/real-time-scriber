@@ -52,7 +52,11 @@ async function stopRecording() {
     socket.emit("toggle_transcription", { action: "stop" });
 
     const transcript = document.getElementById("captions").innerText;
-    socket.emit("get_summary", { transcript: transcript });
+    const promptType = document.getElementById("promptSelect").value;
+    socket.emit("get_summary", {
+      transcript: transcript,
+      promptType: promptType,
+    });
 
     microphone = null;
     isRecording = false;
@@ -67,6 +71,39 @@ socket.on("summary_ready", (data) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const recordButton = document.getElementById("record");
+  const promptSelect = document.getElementById("promptSelect");
+  const regenerateBtn = document.getElementById("regenerateBtn");
+
+  // Fetch available prompts
+  fetch("/get_prompts")
+    .then((response) => response.json())
+    .then((data) => {
+      // Populate the dropdown with prompt options
+      data.prompts.forEach((prompt) => {
+        const option = document.createElement("option");
+        option.value = prompt.name;
+        option.textContent = prompt.name
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+        promptSelect.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error loading prompts:", error));
+
+  regenerateBtn.addEventListener("click", () => {
+    const transcript = document.getElementById("captions").innerText;
+    const promptType = document.getElementById("promptSelect").value;
+
+    if (transcript.trim() === "Realtime speech transcription API") {
+      alert("Please record some audio first before generating a summary.");
+      return;
+    }
+
+    socket.emit("get_summary", {
+      transcript: transcript,
+      promptType: promptType,
+    });
+  });
 
   recordButton.addEventListener("click", () => {
     if (!isRecording) {
