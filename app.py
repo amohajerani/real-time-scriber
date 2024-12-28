@@ -3,7 +3,7 @@ import logging
 from dotenv import load_dotenv
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 import json
-from config.mongodb import recordings, prompts
+from config.mongodb import recordings, prompts, patients
 from bson import ObjectId
 from datetime import datetime
 from auth import login_required, register_user, verify_user
@@ -172,8 +172,14 @@ def logout():
 def get_user_recordings():
     try:
         user_id = session.get('user_id')
+        patient_id = request.args.get('patient_id')
+
+        query = {"user_id": user_id}
+        if patient_id:
+            query["patient_id"] = patient_id
+
         user_recordings = list(recordings.find(
-            {"user_id": user_id},
+            query,
             {'transcript': 1, 'summary': 1, 'timestamp': 1, 'prompt_type': 1}
         ).sort('timestamp', -1))
 
@@ -192,6 +198,45 @@ def get_user_recordings():
             'success': False,
             'error': str(e)
         })
+
+
+@app.route('/get_patients')
+@login_required
+def get_patients():
+    try:
+        user_id = session.get('user_id')
+        patient_list = list(patients.find(
+            {"user_id": user_id},
+            {'firstName': 1, 'lastName': 1, 'notes': 1}
+        ))
+        for patient in patient_list:
+            patient['_id'] = str(patient['_id'])
+        return jsonify({'success': True, 'patients': patient_list})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+
+@app.route('/add_patient', methods=['POST'])
+@login_required
+def add_patient():
+    try:
+        data = request.json
+        user_id = session.get('user_id')
+
+        new_patient = {
+            "firstName": data.get('firstName'),
+            "lastName": data.get('lastName'),
+            "notes": data.get('notes'),
+            "user_id": user_id,
+            "created_at": datetime.utcnow()
+        }
+
+        result = patients.insert_one(new_patient)
+        new_patient['_id'] = str(result.inserted_id)
+
+        return jsonify({'success': True, 'patient': new_patient})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
 
 
 if __name__ == '__main__':

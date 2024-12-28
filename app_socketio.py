@@ -149,7 +149,8 @@ def handle_get_summary(data):
             "summary": summary,
             "prompt_type": prompt_name,
             "timestamp": datetime.utcnow(),
-            "user_id": user_id
+            "user_id": user_id,
+            "patient_id": data.get('patient_id')
         }
 
         recordings.insert_one(recording_doc)

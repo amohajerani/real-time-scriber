@@ -65,6 +65,7 @@ async function stopRecording() {
       transcript: currentTranscript,
       promptType: promptType,
       user_id: document.body.getAttribute("data-user-id"),
+      patient_id: document.getElementById("patientSelect").value,
     });
 
     microphone = null;
@@ -118,6 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
       transcript: transcript,
       promptType: promptType,
       user_id: document.body.getAttribute("data-user-id"),
+      patient_id: document.getElementById("patientSelect").value,
     });
   });
 
@@ -140,6 +142,24 @@ document.addEventListener("DOMContentLoaded", () => {
     currentRecordingId = data.recording_id;
     loadUserRecordings();
   });
+
+  // Add patient select change handler
+  document.getElementById("patientSelect").addEventListener("change", () => {
+    const selectedPatientId = document.getElementById("patientSelect").value;
+    if (selectedPatientId) {
+      toggleRecordingElements(true);
+      loadUserRecordings();
+    } else {
+      toggleRecordingElements(false);
+      showPatientPrompt();
+    }
+  });
+
+  const selectedPatientId = document.getElementById("patientSelect").value;
+  toggleRecordingElements(selectedPatientId ? true : false);
+  if (!selectedPatientId) {
+    showPatientPrompt();
+  }
 });
 
 document.getElementById("copyNoteBtn").addEventListener("click", async () => {
@@ -227,7 +247,12 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 });
 
 function loadUserRecordings() {
-  fetch("/get_user_recordings")
+  const selectedPatientId = document.getElementById("patientSelect").value;
+  const url = selectedPatientId
+    ? `/get_user_recordings?patient_id=${selectedPatientId}`
+    : "/get_user_recordings";
+
+  fetch(url)
     .then((response) => response.json())
     .then((data) => {
       console.log("Received recordings data:", data);
@@ -275,4 +300,24 @@ function loadUserRecordings() {
       const recordingsList = document.getElementById("recordingsList");
       recordingsList.innerHTML = "<p>Error loading recordings</p>";
     });
+}
+
+function toggleRecordingElements(show) {
+  const elementsToHide = [
+    document.querySelector(".recording-section"),
+    document.querySelector(".summary-container"),
+    document.querySelector(".recordings-container"),
+  ];
+
+  elementsToHide.forEach((element) => {
+    if (element) {
+      element.style.display = show ? "block" : "none";
+    }
+  });
+}
+
+function showPatientPrompt() {
+  const recordingsList = document.getElementById("recordingsList");
+  recordingsList.innerHTML =
+    "<div class='patient-prompt'><p>Please select a patient or create a new patient to start recording</p></div>";
 }

@@ -10,3 +10,4 @@ db = client.realtime
 recordings = db.recordings
 prompts = db.prompts
 users = db.users
+patients = db.patients

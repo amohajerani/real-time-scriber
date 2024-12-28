@@ -23,23 +23,7 @@
     </div>
 
     <div class="main-container">
-      <div class="recording-section">
-        <div class="button-container">
-          <input type="checkbox" id="record" class="mic-checkbox" />
-          <label for="record" class="mic-button">
-            <i class="fas fa-microphone"></i>
-            <span class="button-text">Start Recording</span>
-          </label>
-        </div>
-        <div class="captions" id="captions" contenteditable="true">
-          <span>Transcript will appear here after recording</span>
-        </div>
-        <button id="saveTranscriptBtn" class="action-btn">
-          <i class="fas fa-save"></i> Save Transcript
-        </button>
-      </div>
-
-      <div class="summary-container">
+      <div class="sidebar">
         <div class="prompt-selector">
           <h2>Template Selection</h2>
           <div class="selector-controls">
@@ -72,33 +56,64 @@
             </div>
           </div>
         </div>
-
-        <div class="documentation-section">
-          <h2>
-            Clinical Note
-            <button
-              id="copyNoteBtn"
-              class="action-btn secondary tooltip"
-              title="Copy to clipboard"
-            >
-              <i class="fas fa-copy"></i> Copy Note
-            </button>
-          </h2>
-          <div class="summary" id="summary" contenteditable="true">
-            <span
-              >Generated clinical note will appear here after recording</span
-            >
-          </div>
-          <button id="saveSummaryBtn" class="action-btn">
-            <i class="fas fa-save"></i> Save Note
-          </button>
-        </div>
       </div>
 
-      <div class="recordings-container">
-        <h2>Past Recordings</h2>
-        <div id="recordingsList" class="recordings-list">
-          <!-- Recordings will be populated here -->
+      <div class="main-content">
+        <div class="patient-section">
+          <div class="patient-selector">
+            <select id="patientSelect">
+              <option value="">Select Patient</option>
+            </select>
+            <button id="newPatientBtn" class="action-btn">
+              <i class="fas fa-user-plus"></i> New Patient
+            </button>
+          </div>
+        </div>
+
+        <div class="recording-section">
+          <div class="button-container">
+            <input type="checkbox" id="record" class="mic-checkbox" />
+            <label for="record" class="mic-button">
+              <i class="fas fa-microphone"></i>
+              <span class="button-text">Start Recording</span>
+            </label>
+          </div>
+          <div class="captions" id="captions" contenteditable="true">
+            <span>Transcript will appear here after recording</span>
+          </div>
+          <button id="saveTranscriptBtn" class="action-btn">
+            <i class="fas fa-save"></i> Save Transcript
+          </button>
+        </div>
+
+        <div class="summary-container">
+          <div class="documentation-section">
+            <h2>
+              Clinical Note
+              <button
+                id="copyNoteBtn"
+                class="action-btn secondary tooltip"
+                title="Copy to clipboard"
+              >
+                <i class="fas fa-copy"></i> Copy Note
+              </button>
+            </h2>
+            <div class="summary" id="summary" contenteditable="true">
+              <span
+                >Generated clinical note will appear here after recording</span
+              >
+            </div>
+            <button id="saveSummaryBtn" class="action-btn">
+              <i class="fas fa-save"></i> Save Note
+            </button>
+          </div>
+        </div>
+
+        <div class="recordings-container">
+          <h2>Past Recordings</h2>
+          <div id="recordingsList" class="recordings-list">
+            <!-- Recordings will be populated here -->
+          </div>
         </div>
       </div>
     </div>
@@ -112,7 +127,32 @@
         <button id="cancelNewPromptBtn">Cancel</button>
       </div>
     </div>
+
+    <div id="newPatientDialog" class="modal" style="display: none">
+      <div class="modal-content">
+        <h3>Add New Patient</h3>
+        <div class="form-group">
+          <label for="patientFirstName">First Name:</label>
+          <input type="text" id="patientFirstName" required />
+        </div>
+        <div class="form-group">
+          <label for="patientLastName">Last Name:</label>
+          <input type="text" id="patientLastName" required />
+        </div>
+        <div class="form-group">
+          <label for="patientNotes">Notes:</label>
+          <textarea id="patientNotes" rows="4"></textarea>
+        </div>
+        <div class="dialog-buttons">
+          <button id="savePatientBtn" class="action-btn">Save</button>
+          <button id="cancelPatientBtn" class="action-btn secondary">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
     <script src="../static/script.js"></script>
     <script src="../static/prompt-handler.js"></script>
+    <script src="../static/patient-handler.js"></script>
   </body>
 </html>
