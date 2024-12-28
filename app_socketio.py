@@ -14,6 +14,9 @@ import json
 
 load_dotenv()
 
+# Add this with other global variables
+current_transcript = ""
+
 
 def get_prompt(prompt_name='default_summary'):
     try:
@@ -52,7 +55,8 @@ dg_connection = None
 
 
 def initialize_deepgram_connection():
-    global dg_connection
+    global dg_connection, current_transcript
+    current_transcript = ""  # Reset transcript
     # Initialize Deepgram client and connection
     dg_connection = deepgram.listen.live.v("1")
 
@@ -60,11 +64,14 @@ def initialize_deepgram_connection():
         print(f"\n\n{open}\n\n")
 
     def on_message(self, result, **kwargs):
+        global current_transcript
         transcript = result.channel.alternatives[0].transcript
         if len(transcript) > 0:
-            print(result.channel.alternatives[0].transcript)
+            current_transcript += " " + transcript
+            print(transcript)
             socketio.emit('transcription_update', {
-                          'transcription': transcript})
+                'transcription': transcript
+            })
 
     def on_close(self, close, **kwargs):
         print(f"\n\n{close}\n\n")
@@ -93,9 +100,11 @@ def handle_audio_stream(data):
 
 @socketio.on('toggle_transcription')
 def handle_toggle_transcription(data):
+    global current_transcript
     print("toggle_transcription", data)
     action = data.get("action")
     if action == "start":
+        current_transcript = ""  # Reset transcript
         print("Starting Deepgram connection")
         initialize_deepgram_connection()
 

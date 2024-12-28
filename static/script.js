@@ -1,6 +1,7 @@
 let isRecording = false;
 let socket;
 let microphone;
+let currentTranscript = "";
 
 const socket_port = 5001;
 socket = io(
@@ -8,7 +9,12 @@ socket = io(
 );
 
 socket.on("transcription_update", (data) => {
-  document.getElementById("captions").innerHTML = data.transcription;
+  currentTranscript += " " + data.transcription;
+  // Optionally update a live display of the transcript
+  const captionsElement = document.getElementById("captions");
+  if (captionsElement) {
+    captionsElement.innerHTML = currentTranscript;
+  }
 });
 
 async function getMicrophone() {
@@ -51,10 +57,11 @@ async function stopRecording() {
     microphone.stream.getTracks().forEach((track) => track.stop());
     socket.emit("toggle_transcription", { action: "stop" });
 
-    const transcript = document.getElementById("captions").innerText;
+    document.getElementById("captions").innerHTML = currentTranscript;
+
     const promptType = document.getElementById("promptSelect").value;
     socket.emit("get_summary", {
-      transcript: transcript,
+      transcript: currentTranscript,
       promptType: promptType,
     });
 
@@ -62,6 +69,8 @@ async function stopRecording() {
     isRecording = false;
     console.log("Client: Microphone closed");
     document.body.classList.remove("recording");
+
+    currentTranscript = "";
   }
 }
 

@@ -191,6 +191,9 @@ h1 {
   margin: 30px 0;
   width: 100%;
   text-align: left;
+  height: 100px;
+  overflow-y: auto;
+  max-height: 100px;
 }
 
 .summary-container {
