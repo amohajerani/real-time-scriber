@@ -24,7 +24,29 @@ socket.on("transcription_update", (data) => {
 async function getMicrophone() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    return new MediaRecorder(stream, { mimeType: "audio/webm" });
+
+    // Check supported MIME types
+    const mimeTypes = [
+      "audio/webm;codecs=opus", // Best for Chrome, Edge
+      "audio/webm", // Good fallback for Chrome, Edge
+      "audio/mp4;codecs=mp4a", // Best for Safari
+      "audio/mp4", // Good fallback for Safari
+      "audio/aac", // Safari fallback
+      "audio/x-m4a", // Safari alternative
+      "audio/mpeg", // Wide support
+      "", // Browser default (last resort)
+    ];
+
+    let selectedMimeType = null;
+    for (const type of mimeTypes) {
+      if (!type || MediaRecorder.isTypeSupported(type)) {
+        selectedMimeType = type;
+        break;
+      }
+    }
+
+    const options = selectedMimeType ? { mimeType: selectedMimeType } : {};
+    return new MediaRecorder(stream, options);
   } catch (error) {
     console.error("Error accessing microphone:", error);
     throw error;
